@@ -7,7 +7,7 @@ public class Operations {
         return 0;
     }
 
-    public int getOperationDislay() {
+    public void getOperationDislay() {
     }
 
     public void display(String number, String toString) {

@@ -2,33 +2,35 @@ package ru.geekbrains.lesson212;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.TextView;
+
+import com.google.android.material.radiobutton.MaterialRadioButton;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener {
 
     private String number;
-    private String point = ".";
+    private final String point = ".";
     private TextView numbersText;
     private Operations operations;
-  
     private final static String keyOperations = "Operations";
+    private Object saveInstanceState;
+    private Bundle savedInstanceState;
+    private static final String appTheme = "APP_THEME";
+    private static final int myCoolCodeStyle = 0;
+    private static final int appThemeLightCodeStyle = 1;
+    private static final int appThemeCodeStyle = 2;
+    private static final int appThemeDarkCodeStyle =3;
+    private Object NameSharedPreference;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        operations = new Operations();
-        initViews();
-        showDisplay();
-    }
 
     private void showDisplay() {
         operations.getOperationDisplay(numbersText, getText().toString());
-        numbersText.setText(operations.getOperationDislay());
+        numbersText.setText(operations.getOperationDisplay());
     }
 
     public void initViews() {
@@ -48,7 +50,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         Button buttonIncrease = findViewById(R.id.button_increase);
         Button buttonDivision = findViewById(R.id.button_division);
         numbersText = findViewById(R.id.forNumbers);
-        
 
         button1.setOnClickListener(this);
         button2.setOnClickListener(this);
@@ -65,7 +66,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         buttonMinus.setOnClickListener(this);
         buttonIncrease.setOnClickListener(this);
         buttonDivision.setOnClickListener(this);
-
     }
 
     @Override
@@ -173,6 +173,70 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             super.onStart();
         }
 
+        @Override
+        protected void onCreate(Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            
+            setTheme(getAppTheme(R.style.MyCoolStyle));
+            setContentView(R.layout.activity_main);
+            initThemeChooser();
+
+            operations = new Operations();
+            initViews();
+            showDisplay();
+        }
+    }
+
+    private void initThemeChooser() {
+        initRadioButton(findViewById(R.id.radioButtonMyCoolStyle),
+                myCoolCodeStyle);
+        initRadioButton(findViewById(R.id.radioButtonMaterialDark),
+                appThemeDarkCodeStyle);
+        initRadioButton(findViewById(R.id.radioButtonMaterialLight),
+                appThemeLightCodeStyle);
+        initRadioButton(findViewById(R.id.radioButtonMaterialLightDarkAction),
+                appThemeCodeStyle);
+        RadioGroup rg = findViewById(R.id.radioButtons);
+        ((MaterialRadioButton)rg.getChildAt(getCodeStyle(myCoolCodeStyle))).setChecked(true);
+    }
+
+    private void initRadioButton(View button, final int codeStyle) {
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setAppTheme(codeStyle);
+                recreate();
+            }
+        });
+    }
+
+    private int getAppTheme(int codeStyle) {
+        return codeStyleToStyleId(getCodeStyle(codeStyle));
+    }
+
+    private int codeStyleToStyleId(int codeStyle) {
+        switch (codeStyle){
+            case appThemeCodeStyle:
+                return R.style.Theme_Lesson212;
+            case appThemeLightCodeStyle:
+                return R.style.AppThemeLight;
+            case appThemeDarkCodeStyle:
+                return R.style.AppThemeDark;
+            default:
+                return R.style.MyCoolStyle;
+        }
+    }
+
+    private int getCodeStyle(int codeStyle) {
+        SharedPreferences sharedPref = getSharedPreferences((String) NameSharedPreference, MODE_PRIVATE);
+        return sharedPref.getInt(appTheme, codeStyle);
+    }
+
+    private void setAppTheme(int codeStyle) {
+        SharedPreferences sharedPref = getSharedPreferences(String.valueOf(NameSharedPreference), MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPref.edit();
+        editor.putInt(appTheme, codeStyle);
+        editor.apply();
     }
 
     private void getText() {

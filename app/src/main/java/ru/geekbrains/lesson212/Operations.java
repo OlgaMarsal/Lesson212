@@ -1,14 +1,16 @@
 package ru.geekbrains.lesson212;
 
-import android.widget.TextView;
+import androidx.annotation.NonNull;
 
-public class Operations {
-    public int getOperationDisplay(TextView numbersText, String s) {
-        return 0;
+public class Operations<operationDisplay> {
+    public Operations() {
     }
 
-    public void getOperationDislay() {
+    public String getOperationDisplay() {
+        return operationDisplay;
     }
+
+    private String operationDisplay;
 
     public void display(String number, String toString) {
     }
@@ -17,5 +19,19 @@ public class Operations {
     }
 
     public void point(String point) {
+    }
+
+    @NonNull
+    @Override
+    public String toString() {
+        return super.toString();
+    }
+
+    @Override
+    public int hashCode() {
+        return super.hashCode();
+    }
+
+    public void operationDisplay(String number){
     }
 }

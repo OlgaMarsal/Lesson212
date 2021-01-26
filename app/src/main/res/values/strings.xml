@@ -15,4 +15,8 @@
     <string name="_minus">-</string>
     <string name="_increase">*</string>
     <string name="_division">/</string>
+    <string name="my_cool_style">My cool style</string>
+    <string name="material_light">Material light</string>
+    <string name="material_light_action_bar_dark">Material light action bar dark</string>
+    <string name="material_dark">Material dark</string>
 </resources>
